@@ -24,6 +24,8 @@ import org.apache.shenyu.examples.dubbo.api.service.DubboTestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -34,6 +36,10 @@ import java.util.Random;
 public class DubboTestServiceImpl implements DubboTestService {
 
     private static final Logger logger = LoggerFactory.getLogger(DubboTestServiceImpl.class);
+    private Random rand = SecureRandom.getInstanceStrong();
+
+    public DubboTestServiceImpl() throws NoSuchAlgorithmException {
+    }
 
     @Override
     @ShenyuDubboClient(path = "/findById", desc = "Query by Id")
@@ -48,9 +54,10 @@ public class DubboTestServiceImpl implements DubboTestService {
     @Override
     @ShenyuDubboClient(path = "/findAll", desc = "Get all data")
     public DubboTest findAll() {
+        int rValue = this.rand.nextInt();
         DubboTest dubboTest = new DubboTest();
         dubboTest.setName("hello world shenyu Apache, findAll");
-        dubboTest.setId(String.valueOf(new Random().nextInt()));
+        dubboTest.setId(String.valueOf(rValue));
         return dubboTest;
     }
 
